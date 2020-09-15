@@ -1,5 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
+const CONSTS = require('./util/constants');
 
 //Route files
 const vehicle = require('./routes/vehicle');
@@ -8,6 +10,11 @@ const vehicle = require('./routes/vehicle');
 dotenv.config({ path: './config/config.env' });
 
 const app = express();
+
+// Dev middlewares
+if (process.env.NODE_ENV === CONSTS.ENVS.DEV) {
+  app.use(morgan('dev'));
+}
 
 //Mount routers
 app.use('/api/v1/vehicles', vehicle);
