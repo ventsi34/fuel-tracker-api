@@ -1,18 +1,23 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-const CONSTS = require('./util/constants');
+const CONSTS = require('./utils/constants');
 const connectDB = require('./config/db');
+const errorHandler = require('./middleware/errorHandler');
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 
+//Db connection
 connectDB();
 
 //Route files
 const vehicle = require('./routes/vehicle');
 
 const app = express();
+
+// Body parser
+app.use(express.json());
 
 // Dev middlewares
 if (process.env.NODE_ENV === CONSTS.ENVS.DEV) {
@@ -21,6 +26,8 @@ if (process.env.NODE_ENV === CONSTS.ENVS.DEV) {
 
 //Mount routers
 app.use('/api/v1/vehicles', vehicle);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(
