@@ -6,6 +6,8 @@ const {
   updateVehicle,
   deleteVehicle
 } = require('../controllers/vehicle');
+const trips = require('./trips');
+
 const router = express.Router();
 
 router
@@ -18,5 +20,8 @@ router
   .get(getVehicle)
   .put(updateVehicle)
   .delete(deleteVehicle);
+
+// Define subroutes
+router.use('/:vehicleId/trips', trips);
 
 module.exports = router;

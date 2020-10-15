@@ -6,7 +6,10 @@ const ErrorResponse = require('../utils/errorResponse');
 // @access    Private
 exports.getTripsByVehicle = asyncHandler(async (req, res, next) => {
   return res.status(200).json({
-    success: true
+    success: true,
+    data: {
+      params: req.params
+    }
   });
 });
 
@@ -15,7 +18,10 @@ exports.getTripsByVehicle = asyncHandler(async (req, res, next) => {
 // @access    Private
 exports.getTripByVehicle = asyncHandler(async (req, res, next) => {
   return res.status(200).json({
-    success: true
+    success: true,
+    data: {
+      params: req.params
+    }
   });
 });
 
@@ -24,7 +30,10 @@ exports.getTripByVehicle = asyncHandler(async (req, res, next) => {
 // @access    Private
 exports.createTrip = asyncHandler(async (req, res, next) => {
   return res.status(200).json({
-    success: true
+    success: true,
+    data: {
+      params: req.params
+    }
   });
 });
 
@@ -33,7 +42,10 @@ exports.createTrip = asyncHandler(async (req, res, next) => {
 // @access    Private
 exports.updateTrip = asyncHandler(async (req, res, next) => {
   return res.status(200).json({
-    success: true
+    success: true,
+    data: {
+      params: req.params
+    }
   });
 });
 
@@ -42,6 +54,9 @@ exports.updateTrip = asyncHandler(async (req, res, next) => {
 // @access    Private
 exports.deleteTrip = asyncHandler(async (req, res, next) => {
   return res.status(200).json({
-    success: true
+    success: true,
+    data: {
+      params: req.params
+    }
   });
 });

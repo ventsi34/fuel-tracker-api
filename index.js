@@ -13,7 +13,6 @@ connectDB();
 
 //Route files
 const vehicle = require('./routes/vehicle');
-const trips = require('./routes/trips');
 
 const app = express();
 
@@ -27,7 +26,6 @@ if (process.env.NODE_ENV === CONSTS.ENVS.DEV) {
 
 //Mount routers
 app.use('/api/v1/vehicles', vehicle);
-app.use('/api/v1/vehicles/:id/trips', trips);
 
 app.use(errorHandler);
 

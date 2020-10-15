@@ -6,7 +6,7 @@ const {
   updateTrip,
   deleteTrip
 } = require('../controllers/trips');
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router
   .route('/')
@@ -14,7 +14,7 @@ router
   .post(createTrip);
 
 router
-  .route('/:trip_id')
+  .route('/:tripId')
   .get(getTripByVehicle)
   .put(updateTrip)
   .delete(deleteTrip);
