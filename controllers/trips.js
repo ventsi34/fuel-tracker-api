@@ -1,10 +1,16 @@
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
+const { pagination } = require('../utils/pagination');
+const Trip = require('../models/Trip');
+const Vehicle = require('../models/Vehicle');
 
 // @desc      Get all trips of vehicle
 // @route     GET /api/v1/vehicle/:id/trips
 // @access    Private
 exports.getTripsByVehicle = asyncHandler(async (req, res, next) => {
+  // Initialize pagination
+  const paging = await pagination(req, Trip);
+
   return res.status(200).json({
     success: true,
     data: {
