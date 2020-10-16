@@ -1,27 +1,30 @@
 const mongoose = require('mongoose');
+const { MODELS_ENUMS } = require('../utils/constants');
 
 const TripSchema = new mongoose.Schema({
-  vehicle: {
-    type: String,
-    required: [true, 'Please add vehicle for this trip'],
-  },
   mileage: {
     type: Number,
     required: [true, 'Please add mileage for this trip'],
   },
   petrolStation: {
     type: String,
-    required: [true, 'Please add petrol station'],
-    trim: true,
+    required: [true, 'Please add drive type'],
+    enum: MODELS_ENUMS.TRIP.PETROL_STATIONS
   },
   drivePlace: {
-    type: String,
+    type: [String],
+    required: [true, 'Please add drive type'],
+    enum: MODELS_ENUMS.TRIP.DRIVE_PLACE
   },
   driveType: {
     type: String,
+    required: [true, 'Please add drive type'],
+    enum: MODELS_ENUMS.TRIP.DRIVE_TYPE
   },
   season: {
     type: String,
+    required: [true, 'Please add season'],
+    enum: MODELS_ENUMS.TRIP.SEASONS
   },
   airConditionerStatus: {
     type: Boolean,
@@ -34,6 +37,11 @@ const TripSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  vehicle: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Vehicle',
+    require: true
   }
 });
 

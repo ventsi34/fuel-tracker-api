@@ -10,6 +10,9 @@ const trips = require('./trips');
 
 const router = express.Router();
 
+// Define subroutes
+router.use('/:vehicleId/trips', trips);
+
 router
   .route('/')
   .get(getVehicles)
@@ -20,8 +23,5 @@ router
   .get(getVehicle)
   .put(updateVehicle)
   .delete(deleteVehicle);
-
-// Define subroutes
-router.use('/:vehicleId/trips', trips);
 
 module.exports = router;
