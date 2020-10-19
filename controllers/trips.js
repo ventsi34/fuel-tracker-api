@@ -11,7 +11,7 @@ exports.getTripsByVehicle = asyncHandler(async (req, res, next) => {
   // Initialize pagination
   const paging = await pagination(req, Trip);
 
-  let query = Trip.find({ vehicle: req.query.vehicleId });
+  let query = Trip.find({ vehicle: req.params.vehicleId });
   query = paging.queryModerator(query);
   const data = await query;
 
@@ -27,20 +27,24 @@ exports.getTripsByVehicle = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/vehicle/:vehicleId/trips/:tripId
 // @access    Private
 exports.getTripByVehicle = asyncHandler(async (req, res, next) => {
-  res.status(200).json({
-    success: true,
-    data: {
-      params: req.params
-    }
-  });
+  const data = await Trip.findById(req.params.tripId).populate('vehicle', 'mark model');
+
+  res.status(200).json({ success: true, data });
 });
 
 // @desc      Create a trip of vehicle
 // @route     POST /api/v1/vehicle/:vehicleId/trips
 // @access    Private
 exports.createTrip = asyncHandler(async (req, res, next) => {
-  req.body.vehicle = req.query.vehicleId;
+  const vehiclesCount = await Vehicle.countDocuments({ _id: req.params.vehicleId });
+
+  if(vehiclesCount !== 1) {
+    return next(new ErrorResponse(`Vehicle with id of ${req.params.vehicleId} can not be found`, 404));
+  }
+
+  req.body.vehicle = req.params.vehicleId;
   const data = await Trip.create(req.body);
+
   res.status(201).json({ success: true, data });
 });
 
@@ -48,22 +52,27 @@ exports.createTrip = asyncHandler(async (req, res, next) => {
 // @route     PUT /api/v1/vehicle/:vehicleId/trips/:tripId
 // @access    Private
 exports.updateTrip = asyncHandler(async (req, res, next) => {
-  return res.status(200).json({
-    success: true,
-    data: {
-      params: req.params
-    }
+  const data = await Trip.findByIdAndUpdate(req.params.tripId, req.body, {
+    new: true,
+    runValidators: true
   });
+  
+  if(!data) {
+    return next(new ErrorResponse(`Trip with id of ${req.params.id} can not be updated`, 400));
+  }
+
+  res.status(200).json({ success: true, data });
 });
 
 // @desc      Delete a trip of vehicle
 // @route     DELETE /api/v1/vehicle/:vehicleId/trips/:tripId
 // @access    Private
 exports.deleteTrip = asyncHandler(async (req, res, next) => {
-  return res.status(200).json({
-    success: true,
-    data: {
-      params: req.params
-    }
-  });
+  const trip = await Trip.findByIdAndRemove(req.params.tripId);
+
+  if(!trip) {
+    return next(new ErrorResponse(`Trip with id of ${req.params.id} can not be deleted`, 400));
+  }
+
+  res.status(200).json({ success: true, data: {} });
 });

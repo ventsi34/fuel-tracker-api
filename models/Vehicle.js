@@ -32,4 +32,9 @@ const VehicleSchema = new mongoose.Schema({
   }
 });
 
+VehicleSchema.pre('remove', async function(next) {
+  await this.model('Trip').deleteMany({ vehicle: this._id });
+  next();
+});
+
 module.exports = mongoose.model('Vehicle', VehicleSchema);

@@ -46,27 +46,29 @@ exports.createVehicle = asyncHandler(async (req, res, next) => {
 // @route     PUT /api/v1/vehicles/:id
 // @access    Private
 exports.updateVehicle = asyncHandler(async (req, res, next) => {
-  const vehicle = await Vehicle.findByIdAndUpdate(req.params.id, req.body, {
+  const data = await Vehicle.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
   });
   
-  if(!vehicle) {
+  if(!data) {
     return next(new ErrorResponse(`Vehicle with id of ${req.params.id} can not be updated`, 400));
   }
 
-  res.status(200).json({ success: true, data: vehicle });
+  res.status(200).json({ success: true, data });
 });
 
 // @desc      DELETE vehicle
 // @route     DELETE /api/v1/vehicles/:id
 // @access    Private
 exports.deleteVehicle = asyncHandler(async (req, res, next) => {
-  const vehicle = await Vehicle.findByIdAndDelete(req.params.id);
+  const vehicle = await Vehicle.findById(req.params.id);
 
   if(!vehicle) {
     return next(new ErrorResponse(`Vehicle with id of ${req.params.id} can not be deleted`, 400));
   }
+
+  await Vehicle.remove({ _id: req.params.id });
 
   res.status(200).json({ success: true, data: {} });
 });
