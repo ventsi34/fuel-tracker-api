@@ -6,7 +6,7 @@ const Vehicle = require('../models/Vehicle');
 
 // @desc      Get all trips of vehicle
 // @route     GET /api/v1/vehicle/:vehicleId/trips
-// @access    Private
+// @access    Public
 exports.getTripsByVehicle = asyncHandler(async (req, res, next) => {
   // Initialize pagination
   const paging = await pagination(req, Trip);

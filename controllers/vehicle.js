@@ -68,7 +68,7 @@ exports.deleteVehicle = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`Vehicle with id of ${req.params.id} can not be deleted`, 400));
   }
 
-  await Vehicle.remove({ _id: req.params.id });
+  await vehicle.remove();
 
   res.status(200).json({ success: true, data: {} });
 });
