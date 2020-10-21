@@ -8,6 +8,8 @@ const {
 } = require('../controllers/vehicle');
 const trips = require('./trips');
 
+const { protect } = require('../middleware/auth');
+
 // Models
 const Vehicle = require('../models/Vehicle');
 
@@ -23,12 +25,12 @@ router.use('/:vehicleId/trips', trips);
 router
   .route('/')
   .get(urlFilter(Vehicle), responseDecorator(Vehicle))
-  .post(createVehicle);
+  .post(protect, createVehicle);
 
 router
   .route('/:id')
   .get(urlFilter(Vehicle), getVehicle)
-  .put(updateVehicle)
-  .delete(deleteVehicle);
+  .put(protect, updateVehicle)
+  .delete(protect, deleteVehicle);
 
 module.exports = router;

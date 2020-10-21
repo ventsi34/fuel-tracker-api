@@ -37,10 +37,18 @@ exports.login = asyncHandler(async (req, res, next) => {
 });
 
 // @desc      Logout user
-// @route     POST /api/v1/auth/logout
+// @route     GET /api/v1/auth/logout
 // @access    Public
 exports.logout = asyncHandler(async (req, res, next) => {
-  res.status(200).json({ success: true });
+  res.cookie('token', 'none', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
 });
 
 // @desc      Reset account password
@@ -66,7 +74,7 @@ const sendTokenResponse = (user, statusCode, res) => {
     options.secure = true;
   }
 
-  res
+  return res
     .status(statusCode)
     .cookie('token', token, options)
     .json({

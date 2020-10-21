@@ -6,6 +6,7 @@ const Trip = require('../models/Trip');
 const paramsChecker = require('../middleware/checkUrlParams');
 const urlFilter = require('../middleware/urlFilter');
 const responseDecorator = require('../middleware/responseDecorator');
+const { protect } = require('../middleware/auth');
 // Controller methods
 const {
   getTripsByVehicle,
@@ -24,12 +25,12 @@ const paramsCheckerConfig = {
 router
   .route('/')
   .get(paramsChecker(paramsCheckerConfig), urlFilter(Trip), getTripsByVehicle, responseDecorator(Trip))
-  .post(paramsChecker(paramsCheckerConfig), createTrip);
+  .post(protect, paramsChecker(paramsCheckerConfig), createTrip);
 
 router
   .route('/:tripId')
   .get(paramsChecker(paramsCheckerConfig), getTripByVehicle)
-  .put(paramsChecker(paramsCheckerConfig), updateTrip)
-  .delete(paramsChecker(paramsCheckerConfig), deleteTrip);
+  .put(protect, paramsChecker(paramsCheckerConfig), updateTrip)
+  .delete(protect, paramsChecker(paramsCheckerConfig), deleteTrip);
 
 module.exports = router;
