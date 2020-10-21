@@ -6,6 +6,10 @@ const TripSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please add mileage for this trip'],
   },
+  fuelAmount: {
+    type: Number,
+    required: [true, 'Please add fuel amount of current charging'],
+  },
   petrolStation: {
     type: String,
     required: [true, 'Please add drive type'],

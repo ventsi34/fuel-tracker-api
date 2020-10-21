@@ -1,26 +1,6 @@
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
-const { pagination } = require('../utils/pagination');
 const Vehicle = require('../models/Vehicle');
-
-// @desc      Get all vehicles
-// @route     GET /api/v1/vehicles
-// @access    Public
-exports.getVehicles = asyncHandler(async (req, res, next) => {
-  // Initialize pagination
-  const paging = await pagination(req, Vehicle);
-  
-  let query = Vehicle.find();
-  query = paging.queryModerator(query);
-  const vehicles = await query;
-
-  const response = paging.responseModerator({
-    success: true,
-    data: vehicles
-  });
-
-  res.status(200).json(response);
-});
 
 // @desc      Get single vehicle
 // @route     GET /api/v1/vehicles/:id

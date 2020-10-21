@@ -1,26 +1,17 @@
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
-const { pagination } = require('../utils/pagination');
 const Trip = require('../models/Trip');
-const Vehicle = require('../models/Vehicle');
 
 // @desc      Get all trips of vehicle
 // @route     GET /api/v1/vehicle/:vehicleId/trips
 // @access    Public
 exports.getTripsByVehicle = asyncHandler(async (req, res, next) => {
-  // Initialize pagination
-  const paging = await pagination(req, Trip);
+  res.queryFilter = {
+    ...res.queryFilter,
+    vehicle: req.params.vehicleId
+  };
 
-  let query = Trip.find({ vehicle: req.params.vehicleId });
-  query = paging.queryModerator(query);
-  const data = await query;
-
-  const response = paging.responseModerator({
-    success: true,
-    data
-  });
-
-  res.status(200).json(response);
+  next();
 });
 
 // @desc      Get single trip of vehicle
@@ -36,12 +27,6 @@ exports.getTripByVehicle = asyncHandler(async (req, res, next) => {
 // @route     POST /api/v1/vehicle/:vehicleId/trips
 // @access    Private
 exports.createTrip = asyncHandler(async (req, res, next) => {
-  const vehiclesCount = await Vehicle.countDocuments({ _id: req.params.vehicleId });
-
-  if(vehiclesCount !== 1) {
-    return next(new ErrorResponse(`Vehicle with id of ${req.params.vehicleId} can not be found`, 404));
-  }
-
   req.body.vehicle = req.params.vehicleId;
   const data = await Trip.create(req.body);
 
