@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 const CONSTS = require('./utils/constants');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
@@ -19,6 +20,9 @@ const app = express();
 
 // Body parser
 app.use(express.json());
+
+// Cookie parser
+app.use(cookieParser());
 
 // Dev middlewares
 if (process.env.NODE_ENV === CONSTS.ENVS.DEV) {
