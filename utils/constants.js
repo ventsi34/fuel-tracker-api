@@ -7,6 +7,13 @@ const constants = {
     DEFAULT_LIMIT: 20
   },
   MODELS_ENUMS: {
+    VEHICLE: {
+      FUEL_TYPE: [
+        'diesel',
+        'petrol',
+        'hybrid'
+      ]
+    },
     TRIP: {
       PETROL_STATIONS: [
         'Petrol',

@@ -1,6 +1,6 @@
 const express = require('express');
 const {
-  getVehicles,
+  getUserVehicle,
   getVehicle,
   createVehicle,
   updateVehicle,
@@ -8,14 +8,19 @@ const {
 } = require('../controllers/vehicle');
 const trips = require('./trips');
 
-const { protect } = require('../middleware/auth');
-
 // Models
 const Vehicle = require('../models/Vehicle');
 
 // Middleware
+const { protect } = require('../middleware/auth');
+const paramsChecker = require('../middleware/checkUrlParams');
+const checkOwnership = require('../middleware/checkOwnership');
 const urlFilter = require('../middleware/urlFilter');
 const responseDecorator = require('../middleware/responseDecorator');
+
+const paramsMatcher = {
+  id: Vehicle
+};
 
 const router = express.Router();
 
@@ -24,13 +29,32 @@ router.use('/:vehicleId/trips', trips);
 
 router
   .route('/')
-  .get(urlFilter(Vehicle), responseDecorator(Vehicle))
+  .get(
+    protect,
+    urlFilter(Vehicle),
+    getUserVehicle,
+    responseDecorator(Vehicle)
+  )
   .post(protect, createVehicle);
 
 router
   .route('/:id')
-  .get(urlFilter(Vehicle), getVehicle)
-  .put(protect, updateVehicle)
-  .delete(protect, deleteVehicle);
+  .get(
+    paramsChecker(paramsMatcher),
+    urlFilter(Vehicle),
+    getVehicle
+  )
+  .put(
+    protect,
+    paramsChecker(paramsMatcher),
+    checkOwnership(paramsMatcher),
+    updateVehicle
+  )
+  .delete(
+    protect,
+    paramsChecker(paramsMatcher),
+    checkOwnership(paramsMatcher),
+    deleteVehicle
+  );
 
 module.exports = router;

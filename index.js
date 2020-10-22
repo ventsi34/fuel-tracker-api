@@ -15,6 +15,7 @@ connectDB();
 //Route files
 const vehicle = require('./routes/vehicle');
 const auth = require('./routes/auth');
+const constant = require('./routes/constant');
 
 const app = express();
 
@@ -32,6 +33,7 @@ if (process.env.NODE_ENV === CONSTS.ENVS.DEV) {
 //Mount routers
 app.use('/api/v1/vehicles', vehicle);
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/constants', constant);
 
 app.use(errorHandler);
 

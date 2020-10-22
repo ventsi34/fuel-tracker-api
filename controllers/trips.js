@@ -28,6 +28,7 @@ exports.getTripByVehicle = asyncHandler(async (req, res, next) => {
 // @access    Private
 exports.createTrip = asyncHandler(async (req, res, next) => {
   req.body.vehicle = req.params.vehicleId;
+  req.body.user = req.user.id;
   const data = await Trip.create(req.body);
 
   res.status(201).json({ success: true, data });

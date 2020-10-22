@@ -2,6 +2,18 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Vehicle = require('../models/Vehicle');
 
+// @desc      Get all vehicle for current user
+// @route     GET /api/v1/vehicles
+// @access    Private
+exports.getUserVehicle = (req, res, next) => {
+  res.queryFilter = {
+    ...res.queryFilter,
+    user: req.user.id
+  };
+
+  next();
+};
+
 // @desc      Get single vehicle
 // @route     GET /api/v1/vehicles/:id
 // @access    Public
@@ -18,6 +30,7 @@ exports.getVehicle = asyncHandler(async (req, res, next) => {
 // @route     POST /api/v1/vehicles
 // @access    Private
 exports.createVehicle = asyncHandler(async (req, res, next) => {
+  req.body.user = req.user.id;
   const vehicle = await Vehicle.create(req.body);
   res.status(201).json({ success: true, data: vehicle });
 });

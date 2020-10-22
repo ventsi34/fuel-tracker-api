@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { MODELS_ENUMS } = require('../utils/constants');
 
 const VehicleSchema = new mongoose.Schema({
   mark: {
@@ -19,12 +20,26 @@ const VehicleSchema = new mongoose.Schema({
     trim: true,
     min: [1, 'The vehicle can not be with lower mileage than 1']
   },
+  fuelType: {
+    type: String,
+    required: [true, 'Please add fuel type'],
+    enum: MODELS_ENUMS.VEHICLE.FUEL_TYPE
+  },
+  engine: {
+    type: String,
+    trim: true,
+  },
   dateOfManufacture: {
     type: Number,
     required: [true, 'Please add vehicle year of manufacture'],
     trim: true,
     min: [1900, 'The vehicle can not be older than 1900'],
     max: [2300, 'The vehicle can not be newer than 2300']
+  },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    require: true
   },
   createdAt: {
     type: Date,

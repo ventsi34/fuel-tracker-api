@@ -10,6 +10,9 @@ const TripSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please add fuel amount of current charging'],
   },
+  averageFuelConsumption: {
+    type: Number
+  },
   petrolStation: {
     type: String,
     required: [true, 'Please add drive type'],
@@ -46,7 +49,17 @@ const TripSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'Vehicle',
     require: true
-  }
+  },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    require: true
+  },
+});
+
+TripSchema.pre('save', function(next) {
+  this.averageFuelConsumption = ((this.fuelAmount / this.mileage) * 100).toFixed(2);
+  next();
 });
 
 module.exports = mongoose.model('Trip', TripSchema);
